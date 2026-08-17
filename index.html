@@ -74,6 +74,16 @@
     position:absolute; right:11px; top:50%; transform:translateY(-50%);
     font-size:11px; color:var(--dim); pointer-events:none;
   }
+  .stats{font-size:11.5px; color:var(--dim); margin:0 0 10px}
+  .stats b{color:#c9c9d2; font-weight:600}
+  .okbox{border:1px solid #14512e; background:#0c2a19; border-radius:11px; padding:14px; margin:0 0 12px}
+  .okbox h3{margin:0 0 6px; font-size:15px; color:var(--ok)}
+  .okbox p{margin:0; font-size:13px; color:#bfe6cd; line-height:1.5}
+  .badbox{border:1px solid #5a1b25; background:#2a0c12; border-radius:11px; padding:14px; margin:0 0 12px}
+  .badbox h3{margin:0 0 6px; font-size:15px; color:#ff8b9b}
+  .badbox p{margin:0; font-size:13px; color:#ffc4cd; line-height:1.5}
+  .chk{display:flex; align-items:center; gap:9px; font-size:13px; color:var(--dim); margin:10px 0 0}
+  .chk input{width:18px; height:18px; margin:0; accent-color:var(--accent)}
   .pill{
     display:inline-flex; align-items:center; gap:6px; font-size:11px; padding:4px 9px;
     border-radius:20px; border:1px solid var(--line); background:var(--card);
@@ -134,6 +144,7 @@
   <h1>Training Log</h1>
   <p class="sub">John Reed · 3×/week · hypertrophy</p>
   <div class="pill" id="pill" title="Sync status"><i></i><span>not set up</span></div>
+  <p class="stats" id="stats"></p>
   <div class="tabs" id="tabs"></div>
 </header>
 
@@ -329,6 +340,61 @@ function draftFor(ex){
   return d[ex.id];
 }
 
+
+
+function dayKey(d){
+  const x = (d instanceof Date) ? d : new Date(d);
+  return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");
+}
+/* index of an existing entry for the same calendar day AND the same day-type */
+function findEntry(hist, key, dayType){
+  for(let i=hist.length-1; i>=0; i--)
+    if(hist[i].day === dayType && dayKey(hist[i].date) === key) return i;
+  return -1;
+}
+/* collapse any pre-existing same-day duplicates, keeping the most recent of each */
+function dedupeHistory(){
+  const seen = new Set(), keep = [];
+  for(let i=S.history.length-1; i>=0; i--){
+    const h=S.history[i], k=h.day+"|"+dayKey(h.date);
+    if(seen.has(k)) continue;
+    seen.add(k); keep.unshift(h);
+  }
+  const removed = S.history.length - keep.length;
+  if(removed){ S.history = keep; save(); }
+  return removed;
+}
+
+/* Reads the store back from scratch to prove what is actually on disk. */
+function readBack(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(!raw) return {ok:false, n:0, msg:"storage is empty"};
+    const p = JSON.parse(raw);
+    if(!Array.isArray(p.history)) return {ok:false, n:0, msg:"no history in storage"};
+    return {ok:true, n:p.history.length, history:p.history, last:p.history[p.history.length-1]};
+  }catch(e){ return {ok:false, n:0, msg:String(e.message||e)}; }
+}
+
+function paintStats(){
+  const el=document.getElementById("stats"); if(!el) return;
+  const r=readBack();
+  if(!r.ok || !r.n){ el.innerHTML="No sessions saved yet."; return; }
+  const d=new Date(r.last.date);
+  el.innerHTML="<b>"+r.n+"</b> session"+(r.n===1?"":"s")+" saved on this phone · last: Day <b>"+
+    r.last.day+"</b>, "+d.toLocaleDateString(undefined,{day:"2-digit",month:"2-digit"})+
+    " "+d.toLocaleTimeString(undefined,{hour:"2-digit",minute:"2-digit"});
+}
+
+function logBlobUrl(){
+  return URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:"application/json"}));
+}
+function downloadLog(name){
+  const a=document.createElement("a");
+  a.href=logBlobUrl(); a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+}
+
 /* ------------------------------ render ------------------------------ */
 const tabsEl=document.getElementById("tabs"), listEl=document.getElementById("list"),
       headEl=document.getElementById("dayhead");
@@ -346,6 +412,7 @@ function renderTabs(){
 
 function render(){
   edited = false; confirmSave = false;
+  paintStats();
   renderTabs();
   const P=PLAN[day];
   headEl.textContent=P.title;
@@ -444,11 +511,22 @@ document.getElementById("save").onclick=()=>{
     toast("These are last session's numbers — tap Finish again to save them as today.");
     return;
   }
-  S.history.push({day:day, date:new Date().toISOString(), entries:entries});
+  const before = readBack().n;
+  const key = dayKey(new Date());
+  const at  = findEntry(S.history, key, day);
+  const rec = {day:day, date:new Date().toISOString(), entries:entries};
+  const replaced = at >= 0;
+  if(replaced) S.history[at] = rec; else S.history.push(rec);
   S.drafts[day]={};
   CFG.dirty = true; saveCfg();
-  save(); render(); window.scrollTo(0,0);
-  toast("Session "+day+" saved — "+n+" sets.");
+  save();
+  const after = readBack();                     // proof, not a promise
+  const expect = before + (replaced ? 0 : 1);
+  const idx = after.ok ? findEntry(after.history, key, day) : -1;
+  const stored = after.ok && after.n === expect && idx >= 0;
+  render(); window.scrollTo(0,0);
+  showSaveResult(stored, day, n, after, replaced);
+  if(stored && CFG.autoDl) downloadLog("training-"+new Date().toISOString().slice(0,10)+"-day"+day+".json");
   sync(false);
 };
 
@@ -467,6 +545,7 @@ function openData(){
     '<label>Token</label><input id="s_tok" type="password" autocomplete="off" placeholder="github_pat_...">'+
     '<div class="dlgbtns"><button id="s_save">Save</button><button id="s_test">Save &amp; sync now</button></div>'+
     '<p class="warn" id="s_state"></p>'+
+    '<label class="chk"><input type="checkbox" id="s_auto"> Also download a JSON copy to my phone after every session</label>'+
     '<h2 style="margin-top:22px">Data</h2>'+
     '<p>'+S.history.length+' saved session(s). Copy or download the text below to keep a manual '+
     'backup — paste it back here to restore.</p>'+
@@ -525,9 +604,42 @@ function openData(){
     CFG.token=b.querySelector("#s_tok").value.trim();
     saveCfg(); paint();
   }
+  b.querySelector("#s_auto").checked = !!CFG.autoDl;
+  b.querySelector("#s_auto").onchange=(e)=>{ CFG.autoDl=e.target.checked; saveCfg(); };
   b.querySelector("#s_save").onclick=()=>{ grab(); toast("Saved."); dlg.close(); };
   b.querySelector("#s_test").onclick=()=>{ grab(); dlg.close(); sync(true); };
   b.querySelector("#cl").onclick=()=>dlg.close();
+  dlg.showModal();
+}
+
+
+function showSaveResult(ok, d, n, rb, replaced){
+  const dlg=document.getElementById("dlg"), b=document.getElementById("dlgbody");
+  if(ok){
+    const when=new Date(rb.last.date);
+    b.innerHTML =
+      '<div class="okbox"><h3>&#10003; '+(replaced?"Updated":"Saved")+'</h3><p>'+
+        'Day '+d+' &middot; '+when.toLocaleDateString()+' '+when.toLocaleTimeString(undefined,{hour:"2-digit",minute:"2-digit"})+
+        '<br>'+n+' set'+(n===1?"":"s")+' written.<br>'+
+        '<b>'+rb.n+'</b> session'+(rb.n===1?"":"s")+' now stored on this phone.'+
+      '</p></div>'+
+      '<p style="font-size:12.5px;color:var(--dim);margin:0 0 12px">Verified by reading the '+
+      'storage back after writing — this is what is actually saved, not just a message.</p>'+
+      '<div class="dlgbtns"><button id="k_ok">OK</button>'+
+      '<button id="k_dl">Download this log</button></div>';
+  } else {
+    b.innerHTML =
+      '<div class="badbox"><h3>&#9888; NOT saved</h3><p>'+
+        'The session could not be written to this browser\'s storage.<br>'+
+        (rb.msg ? "Reason: "+rb.msg+"<br>" : "")+
+        'Likely causes: private/incognito mode, or storage full.'+
+      '</p></div>'+
+      '<p style="font-size:12.5px;color:var(--dim);margin:0 0 12px">Download the log now so '+
+      'today is not lost, then reopen this page in a normal (non-private) tab.</p>'+
+      '<div class="dlgbtns"><button id="k_dl">Download now</button><button id="k_ok">Close</button></div>';
+  }
+  b.querySelector("#k_ok").onclick=()=>dlg.close();
+  b.querySelector("#k_dl").onclick=()=>downloadLog("training-log-"+new Date().toISOString().slice(0,10)+".json");
   dlg.showModal();
 }
 
@@ -538,8 +650,11 @@ function toast(msg){
   clearTimeout(tmr); tmr=setTimeout(()=>t.classList.remove("on"),2200);
 }
 
+const _dupes = dedupeHistory();
 render();
 paint();
+paintStats();
+if(_dupes) toast("Merged "+_dupes+" duplicate entr"+(_dupes===1?"y":"ies")+" from the same day.");
 document.getElementById("pill").onclick = ()=> configured() ? sync(true) : openData();
 window.addEventListener("online", ()=> sync(false));
 if(CFG.dirty) sync(false);
