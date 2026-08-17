@@ -28,12 +28,37 @@ same `IMG` keys, or make the repo private.
 
 ## How it works
 
-- **Set logging** — weight and reps per set. The previous session's numbers appear as grey
-  placeholders in the fields, so you always see what you did last time.
+- **Set logging** — weight and reps per set. Your numbers from last time are already in the
+  fields when you open a day, so you start from where you finished. Adjust and go.
+- **Accidental-save guard** — if you press Finish without changing anything, the first tap
+  only warns you; a second tap saves the carried-over numbers as today.
 - **`↑ add weight next time`** — appears when every set of an exercise hits the top of its
   rep range. That is the double-progression rule from the plan, automated.
-- **Finish session** — moves the current day into history and clears the fields.
-- **Data** — copy, download or restore the full log as JSON, plus the last 20 sessions.
+- **Finish session** — moves the current day into history and re-seeds the fields.
+- **Data** — cloud sync setup, plus copy / download / restore of the whole log as JSON.
+
+## Cloud sync (optional)
+
+Off by default. With it on, the whole log is written to a **private** GitHub repo after every
+finished session, so it can be reviewed without you exporting anything.
+
+Setup, once:
+
+1. Create a **new private repo**, e.g. `chrisrepo-gh/gym-log`. It must NOT be this repo —
+   this one is public and your training data does not belong in it.
+2. GitHub → Settings → Developer settings → **Fine-grained personal access tokens** →
+   Generate new token. Repository access: **Only select repositories** → `gym-log`.
+   Permissions: **Contents → Read and write**. Nothing else. Set an expiry you'll remember.
+3. On the phone: **Data → Cloud sync** → enter owner, repo name and the token → *Save & sync now*.
+
+The token is stored in that phone browser's `localStorage` only. It is not in this page's
+source and is not in this repo. Scope it to the one private repo so that even if it leaked,
+nothing else is reachable.
+
+The pill under the title shows the state at a glance: green with a timestamp = your log is
+safely up; amber = saved on the phone but not uploaded yet, tap to retry; red = something
+is wrong and the message says what. A failed upload never loses data — it stays on the
+phone and retries when you next open the page or come back online.
 
 ## Where the data lives
 

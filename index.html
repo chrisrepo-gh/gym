@@ -74,6 +74,22 @@
     position:absolute; right:11px; top:50%; transform:translateY(-50%);
     font-size:11px; color:var(--dim); pointer-events:none;
   }
+  .pill{
+    display:inline-flex; align-items:center; gap:6px; font-size:11px; padding:4px 9px;
+    border-radius:20px; border:1px solid var(--line); background:var(--card);
+    color:var(--dim); cursor:pointer; margin:0 0 10px;
+  }
+  .pill i{width:7px; height:7px; border-radius:50%; background:var(--dim); font-style:normal}
+  .pill.ok i{background:var(--ok)} .pill.ok{color:#8fe0ae; border-color:#14512e}
+  .pill.wait i{background:#e8b93c} .pill.wait{color:#e8b93c; border-color:#4a3a12}
+  .pill.err i{background:#ff5169} .pill.err{color:#ff8b9b; border-color:#5a1b25}
+  .dlg input{
+    width:100%; padding:11px 12px; margin:0 0 8px; background:var(--card2); color:var(--txt);
+    border:1px solid var(--line); border-radius:9px; font-size:15px; outline:none;
+  }
+  .dlg input:focus{border-color:var(--accent)}
+  .dlg label{font-size:11.5px; color:var(--dim); display:block; margin:0 0 3px}
+  .warn{font-size:12px; color:#e8b93c; margin:10px 0 0; line-height:1.4}
   .bar{
     position:fixed; left:0; right:0; bottom:0; z-index:30; display:flex; gap:8px;
     padding:10px 16px calc(10px + env(safe-area-inset-bottom));
@@ -117,6 +133,7 @@
 <header>
   <h1>Training Log</h1>
   <p class="sub">John Reed · 3×/week · hypertrophy</p>
+  <div class="pill" id="pill" title="Sync status"><i></i><span>not set up</span></div>
   <div class="tabs" id="tabs"></div>
 </header>
 
@@ -190,11 +207,92 @@ const PLAN = {
   ]}
 };
 
+
+/* ------------------------- GitHub sync -------------------------
+   Writes the whole log to <owner>/<repo>/<path> on every finish, and
+   retries on load if the last attempt failed (no signal at the gym).
+   The token is stored only in this browser and is never in the source.
+----------------------------------------------------------------*/
+const SKEY = "jr-gym-sync-v1";
+let CFG = (()=>{ try{ return JSON.parse(localStorage.getItem(SKEY))||{}; }catch(e){ return {}; } })();
+function saveCfg(){ try{ localStorage.setItem(SKEY, JSON.stringify(CFG)); }catch(e){} }
+function configured(){ return !!(CFG.owner && CFG.repo && CFG.token); }
+
+function b64utf8(str){
+  const bytes = new TextEncoder().encode(str);
+  let bin = "";
+  for(let i=0;i<bytes.length;i+=0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i,i+0x8000));
+  return btoa(bin);
+}
+
+async function ghWrite(){
+  const path   = CFG.path   || "log.json";
+  const branch = CFG.branch || "main";
+  const url = "https://api.github.com/repos/"+CFG.owner+"/"+CFG.repo+"/contents/"+path;
+  const h = { "Authorization":"Bearer "+CFG.token,
+              "Accept":"application/vnd.github+json",
+              "X-GitHub-Api-Version":"2022-11-28" };
+  let sha;
+  const g = await fetch(url+"?ref="+encodeURIComponent(branch), {headers:h});
+  if(g.status === 200){ sha = (await g.json()).sha; }
+  else if(g.status === 401){ throw new Error("token rejected (401) — expired or wrong"); }
+  else if(g.status === 403){ throw new Error("forbidden (403) — token lacks Contents: write"); }
+  else if(g.status !== 404){ throw new Error("read failed ("+g.status+")"); }
+  const body = { message:"training log "+new Date().toISOString().slice(0,16).replace("T"," "),
+                 content:b64utf8(JSON.stringify(S,null,1)), branch:branch };
+  if(sha) body.sha = sha;
+  const p = await fetch(url, {method:"PUT", headers:h, body:JSON.stringify(body)});
+  if(p.status !== 200 && p.status !== 201){
+    let d=""; try{ d=(await p.json()).message||""; }catch(e){}
+    throw new Error("write failed ("+p.status+") "+d);
+  }
+}
+
+let syncing = false;
+async function sync(manual){
+  if(syncing) return;
+  if(!configured()){ paint(); if(manual) toast("Set up sync first (Data → Cloud sync)."); return; }
+  if(!CFG.dirty && !manual){ paint(); return; }
+  syncing = true; paint("…");
+  try{
+    await ghWrite();
+    CFG.dirty = false; CFG.lastOk = new Date().toISOString(); CFG.lastErr = "";
+    saveCfg(); paint();
+    if(manual) toast("Synced.");
+  }catch(e){
+    CFG.lastErr = (navigator.onLine === false ? "offline — will retry" : String(e.message||e));
+    saveCfg(); paint();
+    if(manual) toast("Sync failed: "+CFG.lastErr);
+  }finally{ syncing = false; }
+}
+
+function paint(busy){
+  const el = document.getElementById("pill"); if(!el) return;
+  const txt = el.querySelector("span");
+  el.className = "pill";
+  if(busy){ txt.textContent = "syncing…"; return; }
+  if(!configured()){ txt.textContent = "sync not set up"; return; }
+  if(CFG.lastErr){
+    el.classList.add("err");
+    txt.textContent = (CFG.dirty ? "not synced — " : "sync problem — ") + CFG.lastErr;
+    return;
+  }
+  if(CFG.dirty){
+    el.classList.add("wait");
+    txt.textContent = "not synced — tap to retry";
+    return;
+  }
+  el.classList.add("ok");
+  txt.textContent = "synced " + (CFG.lastOk ? new Date(CFG.lastOk).toLocaleString(undefined,
+      {day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}) : "");
+}
+
 /* ------------------------------ state ------------------------------ */
 const KEY = "jr-gym-v1";
 const blank = () => ({history:[], drafts:{A:{},B:{},C:{}}});
 let S = load();
 let day = localStorage.getItem(KEY+"-day") || "A";
+let edited = false, confirmSave = false;
 
 function load(){
   try{
@@ -220,7 +318,13 @@ function lastSets(id){
 function draftFor(ex){
   const d = S.drafts[day];
   if(!d[ex.id] || d[ex.id].length !== ex.sets){
-    d[ex.id] = Array.from({length:ex.sets}, (_,i)=> (d[ex.id]&&d[ex.id][i]) || {w:"",r:""});
+    const prev = lastSets(ex.id);
+    const had  = d[ex.id];
+    d[ex.id] = Array.from({length:ex.sets}, (_,i)=>{
+      if(had && had[i]) return had[i];
+      const p = prev && prev.sets[i];              // start from where you finished last time
+      return p ? {w:p.w||"", r:p.r||""} : {w:"", r:""};
+    });
   }
   return d[ex.id];
 }
@@ -241,6 +345,7 @@ function renderTabs(){
 }
 
 function render(){
+  edited = false; confirmSave = false;
   renderTabs();
   const P=PLAN[day];
   headEl.textContent=P.title;
@@ -283,8 +388,8 @@ function render(){
     const wrap=document.createElement("div"); wrap.className="sets";
     const lastLine=document.createElement("p"); lastLine.className="last";
     if(prev){
-      lastLine.innerHTML="Last ("+fmtDate(prev.date)+"): <b>"+
-        prev.sets.map(s=>(s.w||"–")+"×"+(s.r||"–")).join("  ·  ")+"</b>";
+      lastLine.innerHTML="Carried over from "+fmtDate(prev.date)+": <b>"+
+        prev.sets.map(s=>(s.w||"–")+"×"+(s.r||"–")).join("  ·  ")+"</b> — adjust as you go";
     } else {
       lastLine.textContent="No previous entry yet.";
     }
@@ -303,7 +408,7 @@ function render(){
       const inp=document.createElement("input");
       inp.type="text"; inp.inputMode="decimal"; inp.value=set[k]||"";
       inp.placeholder=ph!==""&&ph!=null?String(ph):"";
-      inp.oninput=()=>{ set[k]=inp.value.replace(",","."); save(); checkUp(); };
+      inp.oninput=()=>{ set[k]=inp.value.replace(",","."); edited=true; confirmSave=false; save(); checkUp(); };
       const u=document.createElement("span"); u.textContent=unit;
       f.appendChild(inp); f.appendChild(u); return f;
     }
@@ -334,10 +439,17 @@ document.getElementById("save").onclick=()=>{
     if(sets.length){ entries[id]=d[id].map(s=>({w:s.w,r:s.r})); n+=sets.length; }
   });
   if(!n){ toast("Nothing logged yet."); return; }
+  if(!edited && !confirmSave){
+    confirmSave = true;
+    toast("These are last session's numbers — tap Finish again to save them as today.");
+    return;
+  }
   S.history.push({day:day, date:new Date().toISOString(), entries:entries});
   S.drafts[day]={};
+  CFG.dirty = true; saveCfg();
   save(); render(); window.scrollTo(0,0);
   toast("Session "+day+" saved — "+n+" sets.");
+  sync(false);
 };
 
 document.getElementById("data").onclick=()=>openData();
@@ -346,9 +458,18 @@ function openData(){
   const dlg=document.getElementById("dlg"), b=document.getElementById("dlgbody");
   const json=JSON.stringify(S);
   b.innerHTML=
-    '<h2>Data</h2>'+
-    '<p>'+S.history.length+' saved session(s). Everything lives in this browser only. '+
-    'Copy or download the text below to keep a backup — paste it back here to restore.</p>'+
+    '<h2>Cloud sync</h2>'+
+    '<p>Writes your whole log to a <b>private</b> GitHub repo after every finished session. '+
+    'The token is stored only in this browser — it is not in the page source and nobody else can read it. '+
+    'Use a fine-grained token scoped to that one repo, with <b>Contents: Read and write</b>.</p>'+
+    '<label>Repo owner</label><input id="s_owner" autocapitalize="off" autocorrect="off" placeholder="chrisrepo-gh">'+
+    '<label>Private repo name</label><input id="s_repo" autocapitalize="off" autocorrect="off" placeholder="gym-log">'+
+    '<label>Token</label><input id="s_tok" type="password" autocomplete="off" placeholder="github_pat_...">'+
+    '<div class="dlgbtns"><button id="s_save">Save</button><button id="s_test">Save &amp; sync now</button></div>'+
+    '<p class="warn" id="s_state"></p>'+
+    '<h2 style="margin-top:22px">Data</h2>'+
+    '<p>'+S.history.length+' saved session(s). Copy or download the text below to keep a manual '+
+    'backup — paste it back here to restore.</p>'+
     '<textarea id="ta" spellcheck="false"></textarea>'+
     '<div class="dlgbtns">'+
       '<button id="cp">Copy</button>'+
@@ -391,6 +512,21 @@ function openData(){
       save(); render(); dlg.close(); toast("Restored.");
     }catch(e){ toast("That is not a valid backup."); }
   };
+  b.querySelector("#s_owner").value = CFG.owner||"";
+  b.querySelector("#s_repo").value  = CFG.repo||"";
+  b.querySelector("#s_tok").value   = CFG.token||"";
+  const st=b.querySelector("#s_state");
+  st.textContent = !configured() ? "Not set up — your log exists only on this phone."
+    : CFG.dirty ? ("Not synced. "+(CFG.lastErr||"")) 
+    : ("Last sync: "+(CFG.lastOk? new Date(CFG.lastOk).toLocaleString() : "never"));
+  function grab(){
+    CFG.owner=b.querySelector("#s_owner").value.trim();
+    CFG.repo =b.querySelector("#s_repo").value.trim();
+    CFG.token=b.querySelector("#s_tok").value.trim();
+    saveCfg(); paint();
+  }
+  b.querySelector("#s_save").onclick=()=>{ grab(); toast("Saved."); dlg.close(); };
+  b.querySelector("#s_test").onclick=()=>{ grab(); dlg.close(); sync(true); };
   b.querySelector("#cl").onclick=()=>dlg.close();
   dlg.showModal();
 }
@@ -403,6 +539,10 @@ function toast(msg){
 }
 
 render();
+paint();
+document.getElementById("pill").onclick = ()=> configured() ? sync(true) : openData();
+window.addEventListener("online", ()=> sync(false));
+if(CFG.dirty) sync(false);
 </script>
 </body>
 </html>
