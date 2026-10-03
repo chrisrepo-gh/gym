@@ -1,10 +1,12 @@
 # Training Plan — John Reed, 3×/week, Hypertrophy
 
 **Built for:** Fernando · 3 sessions/week · ~60 min · goal: muscle / body composition
-**Status:** ~2 months of training, mostly machines · introducing free weights now
-**Legs:** one hip-hinge on Day B; the rest stays with cycling and hiking
+**Status:** ~5 months of training · free weights established · revised Oct 2026
+**Legs:** one leg exercise in every session — quads on A, hinge on B, hamstrings on C
 **Injuries:** none reported — no movement restrictions built in
-**Exercise names:** taken verbatim from the John Reed app library, so you can search them in the app
+**Exercise names:** mostly verbatim from the John Reed app library. The four added in October
+(Leg Press, Leg Curl, Prone Dumbbell Rear Delt Raise) are not confirmed against the library —
+see the last section.
 
 ---
 
@@ -15,9 +17,9 @@ what drives hypertrophy at this training age far more than long single-muscle se
 
 | Day | Emphasis | Free-weight content |
 |---|---|---|
-| **A** | Push (chest, shoulders, triceps) | Dumbbell bench, dumbbell shoulder press, lateral raise |
-| **B** | Pull (back, biceps, rear delts) + hinge | One-arm dumbbell row, stiff-leg deadlift, EZ-bar curl |
-| **C** | Mixed — incline chest, back, arms | Incline dumbbell bench, hammer curl, overhead extension |
+| **A** | Push (chest, shoulders, triceps) + **quads** + core | Dumbbell bench, dumbbell shoulder press, lateral raise |
+| **B** | Pull (back, biceps, rear delts) + **hinge** + core | One-arm dumbbell row, stiff-leg deadlift, rear delt raise |
+| **C** | Mixed — incline chest, back, arms + **hamstrings** + core | Incline dumbbell bench, hammer curl, overhead extension |
 
 Order in the week: A – rest – B – rest – C – rest – rest (e.g. Mon / Wed / Fri).
 If you shift days around, just keep one rest day between sessions.
@@ -31,11 +33,13 @@ If you shift days around, just keep one rest day between sessions.
 | 1 | **Dumbbell Bench Press** | 3 × 8–10 | 2 min | free weight |
 | 2 | Incline Chest Press dual | 3 × 10–12 | 90 s | machine |
 | 3 | **Seated Dumbbell Shoulder Press** | 3 × 8–10 | 2 min | free weight |
-| 4 | **Standing Dumbbell Lateral Raise** | 3 × 12–15 | 60 s | free weight |
-| 5 | Triceps Extension | 3 × 10–12 | 60 s | machine |
-| 6 | Leg Raise Station | 2 × max clean reps | 60 s | machine |
+| 4 | Leg Press | 3 × 10–12 | 2 min | machine · legs |
+| 5 | **Standing Dumbbell Lateral Raise** | 3 × 12–15 | 60 s | free weight |
+| 6 | Triceps Extension | 2 × 10–12 | 60 s | machine |
+| 7 | Leg Raise Station | 3 × max clean reps | 60 s | machine |
 
-**17 working sets.**
+**20 working sets.** The leg press sits at position 4 — after the three pressing
+movements, so they get you fresh, and before the isolation work, so it does not get skipped.
 
 ---
 
@@ -44,15 +48,15 @@ If you shift days around, just keep one rest day between sessions.
 | # | Exercise | Sets × Reps | Rest | Type |
 |---|---|---|---|---|
 | 1 | **One-Arm Dumbbell Row on Bench** | 3 × 10–12 per side | 90 s | free weight |
-| 2 | Lat Pulldown Machine | 3 × 10–12 | 90 s | machine |
+| 2 | Lat Pulldown Dual | 3 × 10–12 | 90 s | machine |
 | 3 | Rowing Machine dual (Seated) | 3 × 10–12 | 90 s | machine |
 | 4 | **Dumbbell Stiff-Leg Deadlift** | 3 × 10–12 | 2 min | free weight · legs |
-| 5 | Cable Reverse Fly | 3 × 12–15 | 60 s | cable |
-| 6 | **Standing EZ-Bar Curl** | 3 × 8–12 | 60 s | free weight |
-| 7 | Abdominal Machine | 2 × 10–15 | 60 s | machine |
+| 5 | **Prone Dumbbell Rear Delt Raise** | 3 × 12–15 | 60 s | free weight |
+| 6 | **Standing EZ-Bar Curl** | 2 × 8–12 | 60 s | free weight |
+| 7 | Abdominal Machine | 3 × 10–15 | 60 s | machine |
 
-**20 working sets** — this is now the longest session. If you run short on time, the
-Abdominal Machine goes first, then a set off the Cable Reverse Fly. Never the hinge.
+**20 working sets.** If you run short on time, a set comes off the Abdominal Machine first,
+then off the rear delt raise. Never the hinge.
 
 The stiff-leg deadlift is the one leg movement in the plan. Start very light — an empty-ish
 pair of dumbbells for the first two sessions. The limiting factor is keeping a flat back
@@ -69,11 +73,12 @@ the hamstrings, you are rounding: reduce the range until you feel it in the hams
 | 2 | High Row dual | 3 × 10–12 | 90 s | machine |
 | 3 | Butterfly | 2 × 12–15 | 60 s | machine |
 | 4 | Lateral Raise Machine dual | 3 × 12–15 | 60 s | machine |
-| 5 | **Dumbbell Hammer Curl** | 3 × 10–12 | 60 s | free weight |
-| 6 | **Seated Dumbbell Overhead Triceps Extension** | 3 × 10–12 | 60 s | free weight |
-| 7 | Cable Wood Chop | 2 × 12 per side | 60 s | cable — drop this first if short on time |
+| 5 | Leg Curl | 3 × 10–12 | 90 s | machine · legs |
+| 6 | **Dumbbell Hammer Curl** | 2 × 10–12 | 60 s | free weight |
+| 7 | **Seated Dumbbell Overhead Triceps Extension** | 2 × 10–12 | 60 s | free weight |
+| 8 | Cable Wood Chop | 2 × 12 per side | 60 s | cable |
 
-**19 working sets** (17 without the wood chop).
+**20 working sets.**
 
 ---
 
@@ -83,19 +88,26 @@ the hamstrings, you are rounding: reduce the range until you feel it in the hams
 |---|---|---|
 | Chest | 11 | 10–20 ✓ |
 | Back (lats + mid-back) | 12 | 10–20 ✓ |
-| Side delts | 6 direct + pressing | 8–16, low end ✓ |
+| Side delts | 6 direct + pressing | 8–16, low end |
 | Rear delts | 3 direct + rows | acceptable at this stage |
-| Biceps | 6 direct + all rows/pulldowns | 6–12 ✓ |
-| Triceps | 6 direct + all pressing | 6–12 ✓ |
-| Hamstrings / glutes | 3 | minimum viable — see note |
-| Core | 7 | 4–10 ✓ |
+| Biceps | **4** direct + all rows | 6–12 — **below range**, see below |
+| Triceps | **4** direct + all pressing | 6–12 — **below range**, see below |
+| Quadriceps | 3 | new |
+| Hamstrings / glutes | 6 | ✓ |
+| Core | 8 | 4–10 ✓ |
 
-Side and rear delts sit at the low end on purpose. Add a fourth set to the lateral raises
-once you're comfortable with the session length — that's the first thing I'd increase.
+60 working sets per week, against 56 before.
 
-Three sets of hinge per week is the floor, not a leg programme. It protects the posterior
-chain and gives the hamstrings and glutes a genuine stimulus; it does not replace squatting
-or leg pressing. Called out so you know exactly what you're getting for those seven minutes.
+**Biceps and triceps now sit below the useful range, and you should know it.** Adding a leg
+exercise to every session and a third core set cost about eight sets, and you chose to keep
+the sessions at 60 minutes. Arm isolation is the right place to take that from — arms get
+substantial indirect work from every press and every row, which quads and hamstrings do not
+get from anything else in the plan. But 4 direct sets per week will grow arms more slowly
+than 6 did. If arm size starts to matter more to you than leg work does, this is the first
+thing to reverse.
+
+Side and rear delts also sit at the low end. If you ever extend a session to ~70 minutes,
+the order I would add sets back in: lateral raises → biceps → triceps.
 
 ---
 
@@ -154,14 +166,36 @@ in this plan. Come back to them later if you want them for their own sake.
 
 ---
 
-## Note on the leg exercise
+## What changed in October 2026, and why
 
-You accepted the minimum version, so it is in the plan: one hip hinge, Day B, three sets.
-That covers hamstrings, glutes and the lower back, and it transfers directly to cycling and
-hiking. What it does not cover is the quadriceps — cycling loads them but does not grow them.
-If you ever want that gap closed, a leg press or hack squat on Day A for 3 × 10–12 is the
-whole fix, and it costs another seven minutes. Not a recommendation you need to act on now;
-just so you know which door is still open.
+**1. "Lat Pulldown Machine" is now "Lat Pulldown Dual"** — the name in the plan was wrong, the
+exercise was not. You have been doing the dual-handle version all along, which is the better
+machine of the two: the handles move independently, so a weaker side has to do its own work
+instead of being carried by the strong one. Watch for that and let the weaker side set the
+load. Same slot, same sets, same logged history.
+
+A Straight-Arm Dumbbell Pullover sat here briefly while I believed the club had no pulldown.
+It is out again — a pullover has no elbow flexion and takes far less load, so it is not a
+substitute for a real vertical pull.
+
+**2. The Cable Reverse Fly is gone — the station is always occupied.** Replacement is the
+**Prone Dumbbell Rear Delt Raise**, face down on a flat bench. Two dumbbells, always
+available. It is also the better choice on Day B specifically: your chest rests on the bench,
+so the lower back carries nothing right after the stiff-leg deadlift.
+
+**3. One leg exercise per session instead of none or one per week.** Leg Press on A (quads),
+the Stiff-Leg Deadlift stays on B (hinge), Leg Curl on C (hamstrings). Hamstring and glute
+volume doubles from 3 to 6 sets, and quadriceps go from zero to 3. Cycling loads the quads
+but does not grow them; this closes that gap.
+
+**4. Core from 6 to 8 sets per week** — 3 / 3 / 2 instead of 2 / 2 / 2.
+
+### Start light on the two new leg machines
+
+First Leg Press session: a weight you could do for 20 reps, and three ramp-up sets instead of
+two. A normal first leg session produces three to five days of soreness that will wreck the
+next two sessions. Same for the Leg Curl. From the second session, load normally — new
+exercises climb fast, so expect to add weight every session for the first three.
 
 ## On the barbell progression
 
@@ -182,3 +216,17 @@ and Back / Free Weights respectively.
 requires a small calorie surplus and roughly 1.6–2.2 g of protein per kg of bodyweight per
 day. Training without that is pushing against a closed door. Ask if you want this worked out
 properly.*
+
+---
+
+## Not verified
+
+**Leg Press, Leg Curl and Prone Dumbbell Rear Delt Raise have not been checked against the John
+Reed app library or against your club's equipment.** The rear delt raise needs only a bench and
+dumbbells, so availability is not in doubt even if the app does not list it under that name. The
+two machines are a genuine open question — if either is missing, tell me and I will substitute:
+hack squat or Smith-machine squat for the leg press, dumbbell or barbell good morning for the
+leg curl.
+
+Exercise names are worth checking against the app generally. The pulldown was in this plan
+under the wrong name for six weeks before it surfaced.
