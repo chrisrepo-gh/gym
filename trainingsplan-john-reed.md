@@ -4,9 +4,8 @@
 **Status:** ~5 months of training · free weights established · revised Oct 2026
 **Legs:** one leg exercise in every session — quads on A, hinge on B, hamstrings on C
 **Injuries:** none reported — no movement restrictions built in
-**Exercise names:** mostly verbatim from the John Reed app library. The four added in October
-(Leg Press, Leg Curl, Prone Dumbbell Rear Delt Raise) are not confirmed against the library —
-see the last section.
+**Exercise names:** verbatim from the John Reed app library, except Leg Press and Lying Leg Curl,
+whose app names are not confirmed — see the last section.
 
 ---
 
@@ -18,8 +17,8 @@ what drives hypertrophy at this training age far more than long single-muscle se
 | Day | Emphasis | Free-weight content |
 |---|---|---|
 | **A** | Push (chest, shoulders, triceps) + **quads** + core | Dumbbell bench, dumbbell shoulder press, lateral raise |
-| **B** | Pull (back, biceps, rear delts) + **hinge** + core | One-arm dumbbell row, stiff-leg deadlift, rear delt raise |
-| **C** | Mixed — incline chest, back, arms + **hamstrings** + core | Incline dumbbell bench, hammer curl, overhead extension |
+| **B** | Pull (back, biceps, rear delts) + **hinge** + core | One-arm dumbbell row, stiff-leg deadlift, EZ-bar curl |
+| **C** | Mixed — incline chest, back, arms + **hamstrings** + core | Incline dumbbell bench, hammer curl, EZ-bar skull crusher |
 
 Order in the week: A – rest – B – rest – C – rest – rest (e.g. Mon / Wed / Fri).
 If you shift days around, just keep one rest day between sessions.
@@ -51,12 +50,12 @@ movements, so they get you fresh, and before the isolation work, so it does not 
 | 2 | Lat Pulldown Dual | 3 × 10–12 | 90 s | machine |
 | 3 | Rowing Machine dual (Seated) | 3 × 10–12 | 90 s | machine |
 | 4 | **Dumbbell Stiff-Leg Deadlift** | 3 × 10–12 | 2 min | free weight · legs |
-| 5 | **Prone Dumbbell Rear Delt Raise** | 3 × 12–15 | 60 s | free weight |
+| 5 | Butterfly Reverse | 3 × 12–15 | 60 s | machine |
 | 6 | **Standing EZ-Bar Curl** | 2 × 8–12 | 60 s | free weight |
 | 7 | Abdominal Machine | 3 × 10–15 | 60 s | machine |
 
 **20 working sets.** If you run short on time, a set comes off the Abdominal Machine first,
-then off the rear delt raise. Never the hinge.
+then off Butterfly Reverse. Never the hinge.
 
 The stiff-leg deadlift is the one leg movement in the plan. Start very light — an empty-ish
 pair of dumbbells for the first two sessions. The limiting factor is keeping a flat back
@@ -73,9 +72,9 @@ the hamstrings, you are rounding: reduce the range until you feel it in the hams
 | 2 | High Row dual | 3 × 10–12 | 90 s | machine |
 | 3 | Butterfly | 2 × 12–15 | 60 s | machine |
 | 4 | Lateral Raise Machine dual | 3 × 12–15 | 60 s | machine |
-| 5 | Leg Curl | 3 × 10–12 | 90 s | machine · legs |
+| 5 | Lying Leg Curl | 3 × 10–12 | 90 s | machine · legs |
 | 6 | **Dumbbell Hammer Curl** | 2 × 10–12 | 60 s | free weight |
-| 7 | **Seated Dumbbell Overhead Triceps Extension** | 2 × 10–12 | 60 s | free weight |
+| 7 | **EZ-Bar Skull Crusher** | 2 × 10–12 | 60 s | free weight |
 | 8 | Cable Wood Chop | 2 × 12 per side | 60 s | cable |
 
 **20 working sets.**
@@ -194,8 +193,28 @@ but does not grow them; this closes that gap.
 
 First Leg Press session: a weight you could do for 20 reps, and three ramp-up sets instead of
 two. A normal first leg session produces three to five days of soreness that will wreck the
-next two sessions. Same for the Leg Curl. From the second session, load normally — new
+next two sessions. Same for the Lying Leg Curl. From the second session, load normally — new
 exercises climb fast, so expect to add weight every session for the first three.
+
+## Swaps on 8 October 2026
+
+**Prone Dumbbell Rear Delt Raise → Butterfly Reverse** (Day B, 3 × 12–15). You did not like the
+prone raise. Butterfly Reverse is the rear-delt mode of the Butterfly machine you already use on
+Day C. Chest stays against the pad, so the lower back still gets nothing right after the stiff-leg
+deadlift — the reason the prone raise was chosen survives the swap.
+
+**Seated Dumbbell Overhead Triceps Extension → EZ-Bar Skull Crusher** (Day C, 2 × 10–12). The
+upper arm stays raised, so the long head of the triceps is still trained in a stretched position —
+the part of the overhead extension worth keeping. It loads the elbow in a similar way; if elbows
+complain, the fallback is Close-Grip EZ-Bar Bench Press, which loses that stretch.
+
+**Leg Curl → Lying Leg Curl** (Day C). The club has no seated leg curl; the lying machine trains the
+same thing. Same slot and same history in the log — only the name changed. A standing glute
+kickback briefly stood in here; it is not a substitute, because it trains hip extension, which
+the stiff-leg deadlift already covers, and no knee flexion.
+
+In the log app the two new exercises have new ids (`butterfly-rev`, `skull-crusher`), so they start
+without history and do not inherit numbers from the exercises they replace. Start both light.
 
 ## On the barbell progression
 
@@ -221,12 +240,9 @@ properly.*
 
 ## Not verified
 
-**Leg Press, Leg Curl and Prone Dumbbell Rear Delt Raise have not been checked against the John
-Reed app library or against your club's equipment.** The rear delt raise needs only a bench and
-dumbbells, so availability is not in doubt even if the app does not list it under that name. The
-two machines are a genuine open question — if either is missing, tell me and I will substitute:
-hack squat or Smith-machine squat for the leg press, dumbbell or barbell good morning for the
-leg curl.
+**The names Leg Press and Lying Leg Curl have not been checked against the John Reed app.** The
+lying leg curl machine is confirmed at your club (you used it on 8 October 2026). EZ-Bar Skull Crusher and Butterfly Reverse are the app's own
+names, confirmed by you on 8 October 2026.
 
 Exercise names are worth checking against the app generally. The pulldown was in this plan
 under the wrong name for six weeks before it surfaced.
